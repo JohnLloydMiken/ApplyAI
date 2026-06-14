@@ -1,0 +1,45 @@
+# ─────────────────────────────────────────────────────────────
+# DEPENDABOT CONFIGURATION
+# This file is NOT a workflow — it tells GitHub's Dependabot bot
+# how to automatically check for outdated packages and open PRs.
+#
+# Location: .github/dependabot.yml  (note: NOT inside /workflows/)
+#
+# How it works with CI:
+#   1. Dependabot detects a package with a newer version
+#   2. It opens a PR: "Bump react from 18.2.0 to 18.3.0"
+#   3. Your ci.yml workflow runs automatically on that PR
+#   4. If CI passes → safe to merge. If it fails → don't merge.
+# ─────────────────────────────────────────────────────────────
+
+version: 2
+
+updates:
+  - package-ecosystem: "npm"   # We're using npm (not pip, cargo, etc.)
+    directory: "/"             # package.json is at the repo root
+    schedule:
+      interval: "weekly"       # Check for updates once a week
+
+    # Max number of open Dependabot PRs at once.
+    # Keeps your PR list from getting flooded.
+    open-pull-requests-limit: 5
+
+    # Automatically add this label to all Dependabot PRs.
+    # Useful for filtering in the GitHub UI.
+    labels:
+      - "dependencies"
+
+    # Group all minor and patch updates into a single PR
+    # instead of one PR per package. Much less noise.
+    groups:
+      all-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Packages to ignore — Dependabot will stop opening PRs for these.
+    # Add any major version bump here that you're not ready to migrate to yet.
+    # Remove the entry when you're ready to upgrade.
+    ignore:
+      - dependency-name: "eslint"
+        versions: ["10.x"]          # Ignore ESLint 10 — breaking config changes, not ready yet

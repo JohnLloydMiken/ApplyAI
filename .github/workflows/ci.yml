@@ -1,0 +1,87 @@
+# ─────────────────────────────────────────────────────────────
+# WORKFLOW: CI — Code quality gate
+# Runs on every push and on pull requests targeting main.
+# Blocks merging if lint, types, or build fails.
+# ─────────────────────────────────────────────────────────────
+
+name: CI
+
+# ── TRIGGERS ──────────────────────────────────────────────────
+# "on:" defines what events cause this workflow to run.
+on:
+  push:
+    branches: ["**"]         # Every push, on every branch
+  pull_request:
+    branches: [main]         # Any PR targeting the main branch
+
+# ── JOBS ──────────────────────────────────────────────────────
+# A workflow contains one or more jobs.
+# By default, jobs run in PARALLEL. Use "needs:" to sequence them.
+jobs:
+
+  # ── JOB 1: Lint & Type check ────────────────────────────────
+  quality:
+    name: Lint & type check
+    runs-on: ubuntu-latest   # GitHub spins up a fresh Ubuntu VM for this job
+
+    steps:
+      # Step 1: Check out your repo code onto the VM
+      # "uses:" runs a pre-built reusable action (like an npm package for CI)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install Node.js on the VM
+      # "with:" passes config options to the action
+      # "cache: npm" caches node_modules between runs — faster subsequent runs
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # Step 3: Install dependencies
+      # "run:" executes a shell command directly
+      # "npm ci" is like "npm install" but faster and stricter (uses package-lock.json)
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Run ESLint
+      # This will fail the job (and block the PR) if there are lint errors
+      - name: Run ESLint
+        run: npm run lint
+
+      # Step 5: TypeScript check
+      # "--noEmit" means "check types but don't output any files"
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+  # ── JOB 2: Build check ──────────────────────────────────────
+  build:
+    name: Build check
+    runs-on: ubuntu-latest
+
+    # "needs:" makes this job wait for "quality" to pass first.
+    # No point building if lint/types already failed.
+    needs: quality
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The Next.js build needs your API key as an env variable.
+      # "${{ secrets.ANTHROPIC_API_KEY }}" reads from GitHub repo secrets —
+      # the key is NEVER stored in your code or visible in logs.
+      # Set this up at: GitHub repo → Settings → Secrets → Actions
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
