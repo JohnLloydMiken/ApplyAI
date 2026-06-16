@@ -1,7 +1,9 @@
-import React from 'react'
-
+import React from "react";
+import HeroPage from "@/components/Home/hero";
 export default function Home() {
   return (
-    <div>Home</div>
-  )
+    <div className="max-w-full flex flex-col">
+      <HeroPage />
+    </div>
+  );
 }
