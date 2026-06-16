@@ -118,7 +118,7 @@
   --foreground: oklch(0.1 0.015 264); /* #0F1117 */
   --card: oklch(1 0 0); /* #FFFFFF — unchanged */
   --card-foreground: oklch(0.1 0.015 264);
-  --primary: #5b5fef; /* #5B5FEF */
+  --primary: #5B5FEF; /* #5B5FEF */
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0.005 247); /* #F1F3F9 */
   --secondary-foreground: oklch(0.37 0.04 264); /* #4B5068 */

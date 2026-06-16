@@ -12,7 +12,7 @@ export default function HomeHeader() {
   return (
     <nav className="w-full border-b border-border bg-background/85 backdrop-blur-md sticky top-0 z-50">
       {/* Inner container — fixed max-width instead of w-9/12 */}
-      <div className="max-w-content mx-auto px-6 h-16 flex flex-row justify-between items-center">
+      <div className="w-9/12 mx-auto  h-16 flex flex-row justify-between items-center">
 
         {/* Logo */}
         <a
