@@ -8,7 +8,6 @@ export default function HeroPage() {
     <div className="w-11/12 lg:w-9/12 my-0 mx-auto min-h-screen flex items-center justify-center py-20 lg:py-0">
       {/* ─── Main flex container: stacked on mobile/tablet → side-by-side on desktop ─── */}
       <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-0 w-full">
-
         {/* ══════════════════════════════════
             LEFT  –  copy + CTA
         ══════════════════════════════════ */}
@@ -21,8 +20,7 @@ export default function HeroPage() {
 
           {/* Headline – fluid type scale */}
           <h1 className="font-display text-[32px] sm:text-[42px] lg:text-[54px] leading-normal  text-foreground w-2/3">
-            Land your dream job with a{" "}
-            <br />
+            Land your dream job with a <br />
             <span className="text-primary relative">
               <span className="absolute bottom-1 right-0 w-[95%] h-1 bg-linear-to-r from-primary-light to-accent-hover" />
               perfect resume
@@ -123,7 +121,6 @@ export default function HeroPage() {
 
         {/* ── Tablet (md) + Desktop (lg): card area ── */}
         <div className="hidden md:flex w-full lg:w-1/2 h-96 lg:h-135 relative flex-col items-center justify-center">
-
           {/* Floating badge TOP-RIGHT — desktop only */}
           <div className="hidden lg:flex bg-white shadow-(--shadow-card) max-w-max items-center justify-center p-3 rounded-lg text-primary uppercase text-xs font-semibold gap-2 border border-border absolute right-0 top-0 z-10">
             <div className="p-2 bg-primary-light rounded-xl">
@@ -147,11 +144,12 @@ export default function HeroPage() {
 
           {/* Resume card – animated on desktop, static on tablet */}
           <motion.div
-            animate={{ y: -20 }}
+            initial={{ y: 0 }}
+            animate={{ y: -8 }}
             transition={{
-              duration: 1.5,
+              duration: 2,
               repeat: Infinity,
-              repeatType: "reverse",
+              repeatType: "mirror", // cleaner than "reverse" — no easing break at the loop point
               ease: "easeInOut",
             }}
             className="bg-white border border-border shadow-(--shadow-card) py-4 px-6 rounded-2xl
@@ -165,7 +163,9 @@ export default function HeroPage() {
                 AJ
               </div>
               <div className="flex flex-col items-start justify-center">
-                <div className="text-base lg:text-lg font-bold">Alex Johnson</div>
+                <div className="text-base lg:text-lg font-bold">
+                  Alex Johnson
+                </div>
                 <div className="text-foreground-muted text-xs lg:text-sm font-medium">
                   Senior Product Manager · San Francisco
                 </div>
@@ -186,7 +186,7 @@ export default function HeroPage() {
                   >
                     {c}
                   </span>
-                )
+                ),
               )}
             </div>
 
@@ -244,7 +244,6 @@ export default function HeroPage() {
             ATS-friendly & recruiter-ready
           </div>
         </div>
-
       </div>
     </div>
   );
