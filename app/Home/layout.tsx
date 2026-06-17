@@ -4,7 +4,7 @@ export default function HomeLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex flex-col h-screen overflow-hidden w-full">
+    <div className="flex flex-col h-full overflow-hidden w-full">
       <HomeHeader/>
       <main>{children}</main>
     </div>
