@@ -1,5 +1,5 @@
 "use client";
-import { div } from "framer-motion/client";
+
 import React from "react";
 import { motion } from "framer-motion";
 export default function Features() {
