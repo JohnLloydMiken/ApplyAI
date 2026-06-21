@@ -146,9 +146,9 @@ export default function Features() {
                 Dear Hiring Manager,
                 <br />
                 <br />
-                I'm excited to apply for the{" "}
+                I&apos;m excited to apply for the{" "}
                 <strong>Senior Product Manager</strong> role at Google. With 6+
-                years driving product strategy at growth-stage startups, I've
+                years driving product strategy at growth-stage startups, I&apos;ve
                 led cross-functional teams to ship features used by millions —
                 including a recommendation engine that increased DAU by{" "}
                 <strong>34%</strong>.
