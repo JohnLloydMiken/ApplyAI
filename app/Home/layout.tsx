@@ -1,5 +1,6 @@
 import React from "react";
 import HomeHeader from "@/components/layout/Home/header";
+import Footer from "@/components/layout/Home/footer";
 export default function HomeLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -7,6 +8,7 @@ export default function HomeLayout({
     <div className="flex flex-col h-full overflow-hidden w-full">
       <HomeHeader/>
       <main>{children}</main>
+      <Footer/>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import Features from "@/components/Home/features";
 import Templates from "@/components/Home/templates";
 import Testimonials from "@/components/Home/testimonials";
 import Pricing from "@/components/Home/pricing";
+import CTA from "@/components/Home/cta";
 export default function Home() {
   return (
     <div className="max-w-full flex flex-col">
@@ -16,6 +17,7 @@ export default function Home() {
       <Templates/>
       <Testimonials/>
       <Pricing/>
+      <CTA/>
     </div>
   );
 }
