@@ -1,5 +1,6 @@
+"use client"
 import React from "react";
-
+import {motion} from "framer-motion"
 const CheckIcon = () => (
   <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 shrink-0">
     <svg
@@ -41,20 +42,22 @@ const PlanCard = ({
   featured = false,
 }: PlanCardProps) => {
   return (
-    <div
+    <motion.div
+    initial ={{y:0}}
+    whileHover={{y: -5}}
       className={`
-        relative flex flex-col rounded-2xl p-8 bg-white
+        relative flex flex-col rounded-2xl p-8 bg-white hover:shadow-lg
         ${
           featured
-            ? "ring-2 ring-primary shadow-xl shadow-indigo-100"
-            : "ring-1 ring-slate-200 shadow-sm"
+            ? "ring-2 ring-primary "
+            : "ring-1 ring-slate-200 ) "
         }
       `}
     >
       {/* Most Popular Badge */}
       {featured && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-semibold tracking-widest text-white uppercase">
+          <span className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 text-xs font-semibold tracking-widest text-white uppercase">
             Most Popular
           </span>
         </div>
@@ -94,7 +97,7 @@ const PlanCard = ({
           {buttonLabel}
         </button>
       )}
-    </div>
+    </motion.div>
   );
 };
 
