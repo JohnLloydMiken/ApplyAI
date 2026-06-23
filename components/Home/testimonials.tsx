@@ -40,14 +40,14 @@ export default function Testimonials() {
   ];
   return (
     <div className="w-full bg-white py-10">
-      <div className="w-9/12 mx-auto flex flex-col justify-center items-center gap-5">
+      <div className="md:w-9/12 w-11/12 mx-auto flex flex-col justify-center items-center gap-5">
         <h3 className="uppercase text-lg text-primary font-bold font-sans">
           Testimonials
         </h3>
-        <h1 className="text-[38px] text-black font-display">
+        <h1 className="text-[38px] text-black font-display text-center">
           Loved by job seekers worldwide
         </h1>
-        <div className="flex w-full items-center justify-between gap-5">
+        <div className="md:flex w-full md:items-center md:justify-between gap-5 grid grid-cols-2">
           {testimonials.map((testi, i) => {
             const initials = getInitials(testi.name ?? "Guest");
             return (
@@ -56,13 +56,13 @@ export default function Testimonials() {
                 className="bg-white border border-border px-6 py-4 rounded-xl shadow-(--shadow-card) flex flex-col justify-center items-start gap-4"
               >
                 <p className="text-yellow">{testi.starts}</p>
-                <p className="text-justify text-foreground-muted">
+                <p className="text-justify text-foreground-muted md:text-base text-xs">
                   &quot;{testi.statement}&quot;
                 </p>
                 <div className="flex items-center justify-start gap-4">
-                  <div className = {`size-11 flex items-center justify-center text-white uppercase   rounded-full ${testi.bg}`}>{initials}</div>
+                  <div className = {`size-11 md:flex items-center justify-center text-white uppercase md:text-base text-sm  hidden  rounded-full ${testi.bg}`}>{initials}</div>
                   <div className="flex flex-col items-start justify-center">
-                    <h2 className="text-sm text-black font-semibold">{testi.name}</h2>
+                    <h2 className="md:text-sm text-xs text-black font-semibold">{testi.name}</h2>
                     <p className="text-xs text-foreground-subtle font-semibold">
                       {testi.role} · Hired at {testi.company}
                     </p>

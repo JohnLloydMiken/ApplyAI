@@ -95,16 +95,16 @@ export default function Features() {
     },
   ];
   return (
-    <div className="w-full bg-white py-10">
-      <div className="mx-auto w-9/12 flex ">
-        <div className="flex flex-col items-start justify-center space-y-4 w-2/5">
+    <div className="w-full bg-white py-10" id="features">
+      <div className="mx-auto md:w-9/12 w-11/12 flex md:flex-row flex-col gap-4">
+        <div className="flex flex-col md:items-start items-center justify-center space-y-4 md:w-2/5">
           <div className="uppercase font-sans tracking-wide text-lg font-semibold text-primary">
             Features
           </div>
-          <div className="text-[38px] font-display text-black max-w-132.5 ">
+          <div className="text-[38px] text-center md:text-left font-display text-black md:max-w-132.5 ">
             Everything you need to land the interview
           </div>
-          <div className="text-[16px] text-secondary-foreground leading-8">
+          <div className="text-[16px] text-center md:text-left text-secondary-foreground leading-8">
             ResumeAI is the only tool that combines AI writing, ATS
             optimization, and beautiful templates in one place.
           </div>
@@ -128,21 +128,21 @@ export default function Features() {
             ))}
           </div>
         </div>
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex-1 md:flex justify-center items-center hidden">
           <div className="max-w-180 shadow-(--shadow-card) rounded-xl border border-border bg-bg overflow-hidden">
             <div className="bg-white border-b border-border px-5 py-3 flex items-center justify-start gap-2">
               <div className="size-2.5 bg-red-400 rounded-full"></div>
               <div className="size-2.5 bg-orange-400 rounded-full"></div>
               <div className="size-2.5 bg-green-400 rounded-full"></div>
-              <span className="text-foreground-subtle text-sm font-medium">
+              <span className="text-foreground-subtle md:text-sm text-xs font-medium">
                 AI Cover Letter · Google PM Role
               </span>
             </div>
             <div className="px-5 py-3 flex flex-col items-center justify-center ">
-              <div className="py-3 px-5 bg-primary-light rounded-2xl border-l-4 border-primary text-primary my-4">
+              <div className="py-3 px-5 bg-primary-light rounded-2xl border-l-4 border-primary text-primary my-4 md:text-base text-sm">
                 ✦ Generating cover letter for Senior Product Manager at Google…
               </div>
-              <div className="text-sm font-normal text-secondary-foreground leading-7">
+              <div className="md:text-sm text-xs font-normal text-secondary-foreground leading-7">
                 Dear Hiring Manager,
                 <br />
                 <br />

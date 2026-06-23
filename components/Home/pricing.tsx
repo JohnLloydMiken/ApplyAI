@@ -149,7 +149,7 @@ const plans: PlanCardProps[] = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="bg-bg py-24 px-4">
+    <section id="pricing" className="bg-bg py-24 px-4" >
       <div className="mx-auto max-w-6xl">
         {/* Section header */}
         <div className="mb-16 text-center">

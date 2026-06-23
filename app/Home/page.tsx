@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import HeroPage from "@/components/Home/hero";
 import Stats from "@/components/Home/stats";
@@ -7,7 +8,10 @@ import Templates from "@/components/Home/templates";
 import Testimonials from "@/components/Home/testimonials";
 import Pricing from "@/components/Home/pricing";
 import CTA from "@/components/Home/cta";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 export default function Home() {
+
+  useSmoothScroll()
   return (
     <div className="max-w-full flex flex-col">
       <HeroPage />
