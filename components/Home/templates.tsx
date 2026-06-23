@@ -4,24 +4,24 @@ import { Button } from "../ui/button";
 import { motion } from "framer-motion";
 export default function Templates() {
   return (
-    <div className="w-full py-10">
-      <div className="w-9/12 flex flex-col mx-auto items-center justify-center gap-5">
+    <div className="w-full py-10" id="templates">
+      <div className="md:w-9/12 w-11/12 flex flex-col mx-auto items-center justify-center gap-5">
         <div className="uppercase text-primary font-semibold text-lg">
           Templates
         </div>
-        <div className="font-display text-[38px] text-black">
+        <div className="font-display text-[38px] text-center text-black">
           Pick a style. Make it yours.
         </div>
         <div className="text-center text-secondary-foreground text-[16px] font-normal max-w-150">
           All templates are fully customizable and export in PDF or DOCX, ready
           to send to any recruiter or ATS system.
         </div>
-        <div className="w-full flex items-center justify-between ">
+        <div className="w-full flex md:flex-row flex-col items-center justify-between gap-4">
           {/* Executive */}
           <motion.div
             initial={{ y: 0 }}
             whileHover={{ y: -15 }}
-            className="border border-border rounded-xl overflow-hidden h-64 w-[30%] flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
+            className="border border-border rounded-xl overflow-hidden h-64 md:w-[30%] w-full flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
           >
             <div className="w-full bg-white h-48 border-l-4 border-l-primary border-b border-border">
               {/* Accent bar */}
@@ -63,7 +63,7 @@ export default function Templates() {
           <motion.div
             initial={{ y: 0 }}
             whileHover={{ y: -15 }}
-            className="border border-border rounded-xl overflow-hidden h-64 w-[30%] flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
+            className="border border-border rounded-xl overflow-hidden h-64 md:w-[30%] w-full flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
           >
             <div className="w-full bg-bg h-48 border-b border-border">
               <div className="flex flex-col gap-2.5 p-5">
@@ -103,7 +103,7 @@ export default function Templates() {
           <motion.div
             initial={{ y: 0 }}
             whileHover={{ y: -15 }}
-            className="border border-border rounded-xl overflow-hidden h-64 w-[30%] flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
+            className="border border-border rounded-xl overflow-hidden h-64 md:w-[30%] w-full flex flex-col hover:border-primary hover:shadow-(--shadow-card)"
           >
             <div className="w-full bg-accent-light h-48 border-b border-border">
               <div className="flex h-full">

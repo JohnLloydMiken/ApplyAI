@@ -99,11 +99,11 @@ const SocialButton = ({
 );
 
 const FooterLinkColumn = ({ title, links }: FooterColumn) => (
-  <div>
+  <div className="">
     <p className="text-sm font-semibold text-gray-800 mb-4">{title}</p>
-    <ul className="space-y-3">
+    <ul className="space-y-3 flex flex-col items-center justify-center">
       {links.map(({ label, href }) => (
-        <li key={label}>
+        <li key={label} className={``}>
           <Link
             href={href}
             className="text-sm text-gray-500 hover:text-gray-800 transition-colors duration-150"
@@ -121,25 +121,41 @@ const FooterLinkColumn = ({ title, links }: FooterColumn) => (
 export default function Footer() {
   return (
     <footer className="w-full bg-card border-t border-gray-100">
-      <div className="w-9/12 mx-auto px-6 pt-14 pb-8 ">
+      {/*
+        ✅ FIX 1: Container width
+        - Mobile:  w-11/12  (matches your header's mobile container)
+        - Desktop: w-9/12   (matches your header's desktop container)
+        The original used only w-9/12 which is too narrow on small screens.
+      */}
+      <div className="w-11/12 md:w-9/12 mx-auto pt-14 pb-8">
 
-        {/* Main grid */}
-        <div className="flex items-center justify-around gap-10 ">
+        {/*
+          ✅ FIX 2: Grid instead of flex
+          The original used `flex justify-around` which NEVER wraps.
+          Grid gives you proper responsive control:
+          - Mobile (default):  1 column — brand + links stack vertically
+          - sm (640px+):       2 columns — brand takes full row, links pair up
+          - lg (1024px+):      4 columns — brand + 3 link columns side by side
+        */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
-          {/* Brand column */}
-          <div className="flex flex-col gap-4 ">
+          {/*
+            ✅ FIX 3: Brand column spans full width on sm so it sits
+            above the 2-column link grid, then returns to 1 col on lg.
+          */}
+          <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
             {/* Logo */}
             <Link href="#" className="flex items-center gap-2 w-fit">
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-linear-to-b from-primary to-purple-600 text-white shrink-0">
                 <DocumentIcon />
               </div>
-              <span className="text-xl font-semibold text-foreground font-sans  tracking-tight">
+              <span className="text-xl font-semibold text-foreground font-sans tracking-tight">
                 ResumeAI
               </span>
             </Link>
 
-            {/* Description */}
-            <p className="text-sm text-gray-500 leading-relaxed max-w-96 ">
+            {/* Description — removed max-w-96, let the grid column control width */}
+            <p className="text-sm text-gray-500 leading-relaxed">
               AI-powered resumes and cover letters that get you hired faster.
               Trusted by 200,000+ professionals worldwide.
             </p>
@@ -158,13 +174,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
+          {/* Link columns — each gets its own grid cell */}
           {FOOTER_COLUMNS.map((col) => (
             <FooterLinkColumn key={col.title} {...col} />
           ))}
         </div>
 
-        {/* Divider */}
+        {/* Divider + bottom row */}
         <div className="mt-12 border-t border-gray-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-400">
           <span>© 2026 ResumeAI. All rights reserved.</span>
           <span>Made with ♥ for job seekers everywhere</span>

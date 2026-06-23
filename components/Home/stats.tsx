@@ -7,9 +7,9 @@ export default function Stats() {
     ]
   return (
     <div className='max-w-full bg-white border border-border'>
-        <div className='flex items-center justify-between w-9/12 mx-auto my-0 py-4'>
+        <div className='flex items-center justify-between  md:w-9/12 w-11/12 mx-auto my-0 py-4'>
             {items.map((c, i)=>(
-                <div key={i} className='text-primary flex flex-col items-center justify-center'><span className="font-extrabold text-4xl font-sans">{c.num}</span> <div className="text-foreground-subtle text-sm font-light">{c.label}</div></div>
+                <div key={i} className='text-primary flex flex-col md:items-center items-start justify-center'><span className="font-extrabold md:text-4xl text-xl font-sans">{c.num}</span> <div className="text-foreground-subtle md:text-sm text-xs font-light">{c.label}</div></div>
             ))}
         </div>
     </div>

@@ -13,13 +13,13 @@ export default function HeroPage() {
         ══════════════════════════════════ */}
         <div className="flex flex-col space-y-10 w-full lg:w-1/2 items-center lg:items-start text-center lg:text-left h-120 relative bottom-16 ">
           {/* Badge pill */}
-          <div className="max-w-max border border-[rgba(91,95,239,.2)] bg-primary-light rounded-full px-4 py-2 flex justify-start items-center gap-2 text-xs uppercase font-sans text-primary font-semibold">
+          <div className="max-w-max mt-2 border border-[rgba(91,95,239,.2)] bg-primary-light rounded-full px-4 py-2 flex justify-start items-center gap-2 text-xs uppercase font-sans text-primary font-semibold">
             <span className="w-1.5 h-1.5 bg-primary rounded-full inline-block" />
             AI-Powered · Trusted by 200k+ users
           </div>
 
           {/* Headline – fluid type scale */}
-          <h1 className="font-display text-[32px] sm:text-[42px] lg:text-[54px] leading-normal  text-foreground w-2/3">
+          <h1 className="font-display text-[32px] sm:text-[42px] lg:text-[54px] leading-normal  text-foreground md:w-2/3  w-full">
             Land your dream job with a <br />
             <span className="text-primary relative">
               <span className="absolute bottom-1 right-0 w-[95%] h-1 bg-linear-to-r from-primary-light to-accent-hover" />
