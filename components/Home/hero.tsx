@@ -19,7 +19,7 @@ export default function HeroPage() {
           </div>
 
           {/* Headline – fluid type scale */}
-          <h1 className="font-display text-[32px] sm:text-[42px] lg:text-[54px] leading-normal  text-foreground md:w-2/3  w-full">
+          <h1 className="font-display text-[32px] sm:text-[42px] lg:text-[54px] leading-normal  text-foreground md:w-10/12 w-full lg:w-10/12 max-w-10/12   ">
             Land your dream job with a <br />
             <span className="text-primary relative">
               <span className="absolute bottom-1 right-0 w-[95%] h-1 bg-linear-to-r from-primary-light to-accent-hover" />
@@ -59,7 +59,7 @@ export default function HeroPage() {
         ══════════════════════════════════ */}
 
         {/* ── Mobile only: two feature pills instead of the card ── */}
-        <div className="flex md:hidden flex-col gap-3 w-full">
+        <div className="flex md:hidden flex-col gap-3 w-full ">
           {/* Feature pill 1 */}
           <div className="flex items-center gap-3 bg-white border border-border rounded-2xl px-4 py-3">
             <div className="p-2 bg-primary-light rounded-xl shrink-0">
@@ -120,7 +120,7 @@ export default function HeroPage() {
         </div>
 
         {/* ── Tablet (md) + Desktop (lg): card area ── */}
-        <div className="hidden md:flex w-full lg:w-1/2 h-96 lg:h-135 relative flex-col items-center justify-center">
+        <div className="hidden md:flex w-full lg:w-1/2 h-96 lg:h-140 relative flex-col items-center justify-center">
           {/* Floating badge TOP-RIGHT — desktop only */}
           <div className="hidden lg:flex bg-white shadow-(--shadow-card) max-w-max items-center justify-center p-3 rounded-lg text-primary uppercase text-xs font-semibold gap-2 border border-border absolute right-0 top-0 z-10">
             <div className="p-2 bg-primary-light rounded-xl">
@@ -158,15 +158,15 @@ export default function HeroPage() {
                         absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             {/* Profile row */}
-            <div className="flex items-center justify-start gap-3 mb-4 lg:mb-6">
-              <div className="rounded-full bg-primary text-white text-lg lg:text-xl p-2.5 lg:p-3 flex justify-center items-center shrink-0">
+            <div className="flex items-center justify-start gap-3 mb-4 lg:mb-4">
+              <div className="rounded-full bg-primary text-white text-base lg:text-lg p-2 lg:p-3 flex justify-center items-center shrink-0">
                 AJ
               </div>
               <div className="flex flex-col items-start justify-center">
-                <div className="text-base lg:text-lg font-bold">
+                <div className="text-xs lg:text-base font-bold">
                   Alex Johnson
                 </div>
-                <div className="text-foreground-muted text-xs lg:text-sm font-medium">
+                <div className="text-foreground-muted text-[10px] lg:text-xs font-medium">
                   Senior Product Manager · San Francisco
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function HeroPage() {
                 (c, i) => (
                   <span
                     key={i}
-                    className={`py-1.5 lg:py-2 px-3 lg:px-6 rounded-full text-xs font-semibold ${
+                    className={`py-1.5 lg:py-2 px-3 lg:px-4 rounded-full text-xs font-semibold ${
                       (i + 1) % 2 === 0
                         ? "bg-primary-light text-primary"
                         : "bg-accent-light text-accent"
@@ -224,7 +224,7 @@ export default function HeroPage() {
           </motion.div>
 
           {/* Floating badge BOTTOM-LEFT — desktop only */}
-          <div className="hidden lg:flex bg-white shadow-(--shadow-card) max-w-max items-center justify-center p-3 rounded-lg text-accent uppercase text-xs font-semibold gap-2 border border-border absolute bottom-4 left-0 z-10">
+          <div className="hidden lg:flex bg-white shadow-(--shadow-card) max-w-max items-center justify-center p-3 rounded-lg text-accent uppercase text-xs font-semibold gap-2 border border-border absolute bottom-0 left-0 z-10">
             <div className="p-2 bg-accent-light rounded-xl">
               <svg
                 width="14"

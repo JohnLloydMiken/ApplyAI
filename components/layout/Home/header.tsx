@@ -36,13 +36,14 @@ function Sidebar({ open, onClose, navItems }: SidebarProps) {
       >
         {/* ✅ FIX 4: X button to close the sidebar.
             Without this, the user has no way to dismiss it. */}
-        <button
+        <Button
+        variant={"default"}
           onClick={onClose}
-          className="self-end text-muted-foreground hover:text-foreground transition-colors"
+          className="self-end text-white hover:text-foreground transition-colors"
           aria-label="Close menu"
         >
           <X size={22} />
-        </button>
+        </Button>
 
         <ul className="flex flex-col gap-6 list-none ">
           {navItems.map((c, i) => (
