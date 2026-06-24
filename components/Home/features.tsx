@@ -89,8 +89,8 @@ export default function Features() {
           />
         </svg>
       ),
-      title: "AI Cover Letter Generator",
-      desc: "Creates personalized, compelling cover letters that speak directly to the employer's needs.",
+      title: "Professional Templates",
+      desc: "Choose from 25+ ATS-friendly, beautifully designed templates optimized for every industry and career level.",
       bgColor: "bg-[#FFF7ED]",
     },
   ];

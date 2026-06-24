@@ -1,15 +1,17 @@
-"use client"
+"use client";
 import React from "react";
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
+
 const CheckIcon = () => (
-  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 shrink-0">
+  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-green-light shrink-0">
     <svg
       width="10"
       height="10"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#10b981"
+      stroke="currentColor"
       strokeWidth="3.5"
+      className="text-green"
     >
       <polyline points="20 6 9 17 4 12" />
     </svg>
@@ -43,14 +45,14 @@ const PlanCard = ({
 }: PlanCardProps) => {
   return (
     <motion.div
-    initial ={{y:0}}
-    whileHover={{y: -5}}
+      initial={{ y: 0 }}
+      whileHover={{ y: -5 }}
       className={`
-        relative flex flex-col rounded-2xl p-8 bg-white hover:shadow-lg
+        relative flex flex-col rounded-2xl p-8 bg-white hover:shadow-(--shadow-card)
         ${
           featured
-            ? "ring-2 ring-primary "
-            : "ring-1 ring-slate-200 ) "
+            ? "ring-2 ring-primary"
+            : "ring-1 ring-border"
         }
       `}
     >
@@ -65,22 +67,22 @@ const PlanCard = ({
 
       {/* Plan header */}
       <div className="mb-6">
-        <p className="text-lg font-semibold text-slate-900">{name}</p>
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
+        <p className="text-lg font-semibold text-black">{name}</p>
+        <p className="mt-1 text-sm text-foreground-subtle">{description}</p>
       </div>
 
       {/* Price */}
       <div className="mb-8">
-        <span className="text-5xl font-extrabold tracking-tight text-slate-900">
+        <span className="text-5xl font-extrabold tracking-tight text-black">
           {price}
         </span>
-        <span className="ml-1 text-sm text-slate-500">{period}</span>
+        <span className="ml-1 text-sm text-foreground-subtle">{period}</span>
       </div>
 
       {/* Feature list */}
       <ul className="mb-8 space-y-3 flex-1">
         {features.map((feature, i) => (
-          <li key={i} className="flex items-center gap-3 text-sm text-slate-700">
+          <li key={i} className="flex items-center gap-3 text-sm text-secondary-foreground">
             <CheckIcon />
             {feature.text}
           </li>
@@ -89,11 +91,11 @@ const PlanCard = ({
 
       {/* CTA button */}
       {buttonVariant === "primary" ? (
-        <button className="w-full rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 active:scale-[0.98] cursor-pointer">
+        <button className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white transition hover:bg-primary-hover active:scale-[0.98] cursor-pointer">
           {buttonLabel}
         </button>
       ) : (
-        <button className="w-full rounded-xl border border-slate-300 bg-white py-3 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 active:scale-[0.98] cursor-pointer">
+        <button className="w-full rounded-xl border border-border bg-white py-3 text-sm font-semibold text-foreground transition hover:bg-surface-2 active:scale-[0.98] cursor-pointer">
           {buttonLabel}
         </button>
       )}
@@ -149,8 +151,8 @@ const plans: PlanCardProps[] = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="bg-bg py-24 px-4" >
-      <div className="mx-auto max-w-6xl">
+    <section id="pricing" className="w-full bg-bg py-24" >
+      <div className="mx-auto md:w-9/12 w-11/12">
         {/* Section header */}
         <div className="mb-16 text-center">
           <p className="mb-3 text-lg font-sans font-semibold text-primary uppercase">
@@ -159,7 +161,7 @@ export default function Pricing() {
           <h2 className="text-[38px] font-display font-bold tracking-tight text-black sm:text-5xl">
             Simple, transparent pricing
           </h2>
-          <p className="mt-4 text-base text-foreground-subtle">
+          <p className="mt-4 text-[16px] text-center text-secondary-foreground leading-8">
             Start for free. Upgrade when you&apos;re ready. Cancel anytime.
           </p>
         </div>
