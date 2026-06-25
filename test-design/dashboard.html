@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResumeAI — Dashboard</title>
+
+  <!-- Google Fonts: Inter + Playfair Display (matching the project) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ─── Project Theme Variables ─── */
+    :root {
+      --primary: #5B5FEF;
+      --primary-hover: #4447D6;
+      --primary-light: #EEF0FD;
+      --accent: #00C9A7;
+      --accent-hover: #00A88D;
+      --accent-light: #E6FAF6;
+      --purple: #7C3AED;
+      --purple-light: #F3E8FF;
+      --orange: #D97706;
+      --orange-light: #FFF7ED;
+      --green: #059669;
+      --green-light: #DCFCE7;
+      --bg: #F8F9FC;
+      --surface-2: #F1F3F9;
+      --foreground: #0F1117;
+      --foreground-muted: #4B5068;
+      --foreground-subtle: #8B92A9;
+      --border: #E4E7F0;
+      --card-shadow: 0 4px 16px rgba(91, 95, 239, 0.12), 0 1px 3px rgba(15, 17, 23, 0.06);
+      --btn-shadow: 0 4px 16px rgba(91, 95, 239, 0.3);
+      --float-shadow: 0 2px 8px rgba(15, 17, 23, 0.08), 0 12px 32px rgba(15, 17, 23, 0.06);
+    }
+
+    /* Dark mode variables */
+    .dark {
+      --bg: #0F1117;
+      --surface-2: #1A1D2E;
+      --foreground: #F1F3F9;
+      --foreground-muted: #8B92A9;
+      --foreground-subtle: #6B7280;
+      --border: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+      --float-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .dark .card {
+      background: #1A1D2E;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .dark .sidebar {
+      background: #151829;
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .dark .input-search {
+      background: #1A1D2E;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #F1F3F9;
+    }
+
+    .dark .table-row {
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .dark .table-row:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .dark .stat-card {
+      background: #1A1D2E;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .dark .bg-white { background: #1A1D2E; }
+    .dark .text-gray-900 { color: #F1F3F9; }
+    .dark .text-gray-700 { color: #CBD5E1; }
+    .dark .text-gray-500 { color: #6B7280; }
+    .dark .text-gray-400 { color: #4B5563; }
+    .dark .border-gray-100 { border-color: rgba(255, 255, 255, 0.06); }
+    .dark .border-gray-200 { border-color: rgba(255, 255, 255, 0.08); }
+    .dark .bg-gray-50 { background: #1A1D2E; }
+    .dark .bg-gray-100 { background: #1A1D2E; }
+    .dark .sidebar-icon { color: #6B7280; }
+    .dark .sidebar-icon.active { color: #5B5FEF; }
+    .dark .sidebar-label { color: #6B7280; }
+    .dark .sidebar-label.active { color: #F1F3F9; }
+    .dark .hover\\:bg-gray-50:hover { background: rgba(255, 255, 255, 0.05); }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--foreground);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* Heading font */
+    .font-display {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--foreground-subtle); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--foreground-muted); }
+
+    /* Sidebar transitions */
+    .sidebar-nav-item {
+      transition: all 0.2s ease;
+    }
+
+    /* Card hover effect */
+    .hover-card {
+      transition: all 0.25s ease;
+    }
+    .hover-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--float-shadow);
+    }
+
+    /* Pulse animation for status dot */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-pulse-dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* Progress bar animation */
+    @keyframes progress-fill {
+      from { width: 0; }
+    }
+    .animate-progress {
+      animation: progress-fill 1.2s ease-out forwards;
+    }
+
+    /* Fade in animation */
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fade-in-up 0.4s ease-out both;
+    }
+    .animate-fade-in-1 { animation-delay: 0.05s; }
+    .animate-fade-in-2 { animation-delay: 0.1s; }
+    .animate-fade-in-3 { animation-delay: 0.15s; }
+    .animate-fade-in-4 { animation-delay: 0.2s; }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Status badges */
+    .badge {
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Sidebar mobile overlay */
+    @media (max-width: 767px) {
+      .sidebar-mobile {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      .sidebar-mobile.open {
+        transform: translateX(0);
+      }
+    }
+
+    /* Progress bar color variants */
+    .progress-high { background: linear-gradient(90deg, var(--primary), var(--accent)); }
+    .progress-medium { background: linear-gradient(90deg, #F59E0B, #D97706); }
+    .progress-low { background: linear-gradient(90deg, #EF4444, #DC2626); }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       SIDEBAR OVERLAY (mobile only)
+  ════════════════════════════════════════════ -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-[90] hidden md:hidden transition-opacity duration-300"></div>
+
+  <!-- ════════════════════════════════════════════
+       SIDEBAR
+  ════════════════════════════════════════════ -->
+  <aside id="sidebar" class="sidebar-mobile md:fixed md:left-0 md:top-0 md:z-30 md:translate-x-0
+    w-64 h-full bg-white border-r border-gray-200 sidebar flex flex-col"
+    style="border-color: var(--border); background: white;">
+
+    <!-- Logo -->
+    <div class="h-16 flex items-center px-5 border-b border-gray-100 shrink-0" style="border-color: var(--border);">
+      <a href="#" class="flex items-center gap-2.5 font-sans font-bold text-base no-underline" style="color: var(--foreground);">
+        <div class="flex items-center justify-center w-8 h-8 rounded-[10px] bg-gradient-to-br from-[#5B5FEF] to-[#7C3AED]">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        ResumeAI
+      </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-1">
+      <!-- Dashboard -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="background: var(--primary-light); color: var(--primary);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" />
+        </svg>
+        Dashboard
+      </a>
+
+      <!-- Resumes -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+        Resumes
+        <span class="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-[#5B5FEF] text-white text-[10px] font-bold" style="background: var(--primary);">3</span>
+      </a>
+
+      <!-- Cover Letters -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        Cover Letters
+      </a>
+
+      <!-- ATS Score -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        ATS Score
+      </a>
+
+      <!-- Templates -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="3" y1="9" x2="21" y2="9" /><line x1="9" y1="21" x2="9" y2="9" />
+        </svg>
+        Templates
+      </a>
+
+      <!-- Divider -->
+      <div class="my-3 border-t border-gray-100" style="border-color: var(--border);"></div>
+
+      <!-- Settings -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+        </svg>
+        Settings
+      </a>
+
+      <!-- Help -->
+      <a href="#" class="sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium" style="color: var(--foreground-muted);">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        Help Center
+      </a>
+    </nav>
+
+    <!-- User profile at bottom -->
+    <div class="shrink-0 p-4 border-t border-gray-100" style="border-color: var(--border);">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#5B5FEF] to-[#7C3AED] flex items-center justify-center text-white text-sm font-bold shrink-0">
+          JM
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold truncate" style="color: var(--foreground);">John Miken</p>
+          <p class="text-xs truncate" style="color: var(--foreground-subtle);">john@example.com</p>
+        </div>
+        <button onclick="toggleDarkMode()" class="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer shrink-0" style="color: var(--foreground-muted);" aria-label="Toggle dark mode">
+          <!-- Sun icon -->
+          <svg id="lightIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <!-- Moon icon -->
+          <svg id="darkIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════ -->
+  <div class="md:ml-64 min-h-screen flex flex-col transition-all duration-300">
+
+    <!-- ═══ Top Header ═══ -->
+    <header class="h-16 bg-white border-b border-gray-100 flex items-center px-4 md:px-6 sticky top-0 z-20 shrink-0" style="background: white; border-color: var(--border);">
+      <!-- Mobile hamburger -->
+      <button onclick="toggleSidebar()" class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer mr-3" style="color: var(--foreground-muted);" aria-label="Toggle sidebar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      <!-- Page title (mobile) -->
+      <h1 class="md:hidden text-base font-bold" style="color: var(--foreground);">Dashboard</h1>
+
+      <!-- Search bar -->
+      <div class="hidden md:flex relative flex-1 max-w-md">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--foreground-subtle);">
+          <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" placeholder="Search resumes, jobs, templates..." class="input-search w-full pl-10 pr-4 py-2 bg-[#F1F3F9] border border-gray-200 rounded-xl text-sm outline-none transition-all duration-200 focus:border-[#5B5FEF] focus:ring-2 focus:ring-[#EEF0FD]" style="background: var(--surface-2); border-color: var(--border); color: var(--foreground);" />
+      </div>
+
+      <!-- Right actions -->
+      <div class="flex items-center gap-2 ml-auto">
+        <!-- Notification bell -->
+        <button class="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" style="color: var(--foreground-muted);" aria-label="Notifications">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" />
+          </svg>
+          <span class="absolute top-2 right-2 w-2 h-2 rounded-full animate-pulse-dot" style="background: var(--primary);"></span>
+        </button>
+
+        <!-- Upgrade button -->
+        <button class="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px cursor-pointer" style="background: linear-gradient(135deg, var(--primary), var(--purple)); box-shadow: var(--btn-shadow);">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+          Upgrade
+        </button>
+      </div>
+    </header>
+
+    <!-- ═══ Main Content Area ═══ -->
+    <main class="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+
+      <!-- Welcome Banner -->
+      <div class="animate-fade-in rounded-2xl p-6 md:p-8 mb-6 text-white relative overflow-hidden" style="background: linear-gradient(135deg, var(--primary), var(--purple));">
+        <!-- Decorative circles -->
+        <div class="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5"></div>
+        <div class="absolute -bottom-8 -left-8 w-48 h-48 rounded-full bg-white/5"></div>
+        <div class="absolute top-10 right-20 w-16 h-16 rounded-full bg-white/5"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 class="text-xl md:text-2xl font-bold font-sans">Welcome back, John! 👋</h2>
+            <p class="text-white/80 text-sm md:text-base mt-1 max-w-lg">
+              You have <strong class="text-white">2 pending applications</strong>. Your last resume scored <strong class="text-white">87%</strong> on ATS — keep it up!
+            </p>
+          </div>
+          <button onclick="showCreateModal()" class="flex items-center gap-2 px-5 py-2.5 bg-white text-[#5B5FEF] rounded-xl font-semibold text-sm transition-all duration-200 hover:-translate-y-px hover:shadow-lg cursor-pointer shrink-0">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Resume
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <!-- Stat 1: Total Resumes -->
+        <div class="stat-card animate-fade-in animate-fade-in-1 bg-white border border-gray-100 rounded-xl p-4 hover-card" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--primary-light);">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#5B5FEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" />
+              </svg>
+            </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background: var(--primary-light); color: var(--primary);">+3 this week</span>
+          </div>
+          <p class="text-2xl font-bold" style="color: var(--foreground);">12</p>
+          <p class="text-xs mt-0.5" style="color: var(--foreground-subtle);">Total Resumes</p>
+        </div>
+
+        <!-- Stat 2: ATS Score -->
+        <div class="stat-card animate-fade-in animate-fade-in-2 bg-white border border-gray-100 rounded-xl p-4 hover-card" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--accent-light);">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#00C9A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background: var(--green-light); color: var(--green);">Good</span>
+          </div>
+          <p class="text-2xl font-bold" style="color: var(--foreground);">87%</p>
+          <p class="text-xs mt-0.5" style="color: var(--foreground-subtle);">Avg. ATS Score</p>
+        </div>
+
+        <!-- Stat 3: Interviews -->
+        <div class="stat-card animate-fade-in animate-fade-in-3 bg-white border border-gray-100 rounded-xl p-4 hover-card" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--purple-light);">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" />
+              </svg>
+            </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background: var(--orange-light); color: var(--orange);">+2 this month</span>
+          </div>
+          <p class="text-2xl font-bold" style="color: var(--foreground);">8</p>
+          <p class="text-xs mt-0.5" style="color: var(--foreground-subtle);">Interviews</p>
+        </div>
+
+        <!-- Stat 4: Cover Letters -->
+        <div class="stat-card animate-fade-in animate-fade-in-4 bg-white border border-gray-100 rounded-xl p-4 hover-card" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--orange-light);">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+            </div>
+            <span class="text-xs font-medium px-2 py-0.5 rounded-full" style="background: var(--primary-light); color: var(--primary);">5 new</span>
+          </div>
+          <p class="text-2xl font-bold" style="color: var(--foreground);">9</p>
+          <p class="text-xs mt-0.5" style="color: var(--foreground-subtle);">Cover Letters</p>
+        </div>
+      </div>
+
+      <!-- Main Content Grid: Resume List + Right Sidebar -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- ═══ LEFT: Recent Resumes Table ═══ -->
+        <div class="lg:col-span-2">
+          <div class="bg-white border border-gray-100 rounded-xl overflow-hidden" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+            <!-- Table Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100" style="border-color: var(--border);">
+              <h3 class="text-base font-bold" style="color: var(--foreground);">Recent Resumes</h3>
+              <a href="#" class="text-sm font-medium no-underline hover:underline" style="color: var(--primary);">View All →</a>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="table-row" style="border-bottom: 1px solid var(--border);">
+                    <th class="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wider" style="color: var(--foreground-subtle);">Job Title</th>
+                    <th class="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wider hidden md:table-cell" style="color: var(--foreground-subtle);">Company</th>
+                    <th class="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wider hidden sm:table-cell" style="color: var(--foreground-subtle);">Status</th>
+                    <th class="text-left px-5 py-3 font-semibold text-xs uppercase tracking-wider hidden lg:table-cell" style="color: var(--foreground-subtle);">ATS Score</th>
+                    <th class="text-right px-5 py-3 font-semibold text-xs uppercase tracking-wider" style="color: var(--foreground-subtle);">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Row 1 -->
+                  <tr class="table-row transition-colors duration-150 hover:bg-gray-50 cursor-pointer" style="border-bottom: 1px solid var(--border);">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background: var(--primary-light);">
+                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#5B5FEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="font-semibold text-sm" style="color: var(--foreground);">Senior Product Manager</p>
+                          <p class="text-xs md:hidden mt-0.5" style="color: var(--foreground-subtle);">Google</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 hidden md:table-cell font-medium" style="color: var(--foreground-muted);">Google</td>
+                    <td class="px-5 py-4 hidden sm:table-cell">
+                      <span class="badge" style="background: var(--primary-light); color: var(--primary);">Optimized</span>
+                    </td>
+                    <td class="px-5 py-4 hidden lg:table-cell">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 h-1.5 rounded-full" style="background: var(--border);">
+                          <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 92%;"></div>
+                        </div>
+                        <span class="text-xs font-bold" style="color: var(--green);">92%</span>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                      <button class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 cursor-pointer" style="color: var(--primary); background: var(--primary-light);" onmouseover="this.style.background='#DDE1FB'" onmouseout="this.style.background='var(--primary-light)'">Edit</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr class="table-row transition-colors duration-150 hover:bg-gray-50 cursor-pointer" style="border-bottom: 1px solid var(--border);">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background: var(--accent-light);">
+                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#00C9A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="font-semibold text-sm" style="color: var(--foreground);">Full Stack Engineer</p>
+                          <p class="text-xs md:hidden mt-0.5" style="color: var(--foreground-subtle);">Stripe</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 hidden md:table-cell font-medium" style="color: var(--foreground-muted);">Stripe</td>
+                    <td class="px-5 py-4 hidden sm:table-cell">
+                      <span class="badge" style="background: var(--green-light); color: var(--green);">Applied</span>
+                    </td>
+                    <td class="px-5 py-4 hidden lg:table-cell">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 h-1.5 rounded-full" style="background: var(--border);">
+                          <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 85%;"></div>
+                        </div>
+                        <span class="text-xs font-bold" style="color: var(--green);">85%</span>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                      <button class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 cursor-pointer" style="color: var(--primary); background: var(--primary-light);" onmouseover="this.style.background='#DDE1FB'" onmouseout="this.style.background='var(--primary-light)'">Edit</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr class="table-row transition-colors duration-150 hover:bg-gray-50 cursor-pointer" style="border-bottom: 1px solid var(--border);">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background: var(--purple-light);">
+                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="font-semibold text-sm" style="color: var(--foreground);">UX Designer</p>
+                          <p class="text-xs md:hidden mt-0.5" style="color: var(--foreground-subtle);">Airbnb</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 hidden md:table-cell font-medium" style="color: var(--foreground-muted);">Airbnb</td>
+                    <td class="px-5 py-4 hidden sm:table-cell">
+                      <span class="badge" style="background: var(--orange-light); color: var(--orange);">Draft</span>
+                    </td>
+                    <td class="px-5 py-4 hidden lg:table-cell">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 h-1.5 rounded-full" style="background: var(--border);">
+                          <div class="h-1.5 rounded-full progress-medium animate-progress" style="width: 62%;"></div>
+                        </div>
+                        <span class="text-xs font-bold" style="color: var(--orange);">62%</span>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                      <button class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 cursor-pointer" style="color: var(--primary); background: var(--primary-light);" onmouseover="this.style.background='#DDE1FB'" onmouseout="this.style.background='var(--primary-light)'">Edit</button>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr class="table-row transition-colors duration-150 hover:bg-gray-50 cursor-pointer">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background: var(--orange-light);">
+                          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="font-semibold text-sm" style="color: var(--foreground);">Data Scientist</p>
+                          <p class="text-xs md:hidden mt-0.5" style="color: var(--foreground-subtle);">Netflix</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 hidden md:table-cell font-medium" style="color: var(--foreground-muted);">Netflix</td>
+                    <td class="px-5 py-4 hidden sm:table-cell">
+                      <span class="badge" style="background: var(--primary-light); color: var(--primary);">Optimized</span>
+                    </td>
+                    <td class="px-5 py-4 hidden lg:table-cell">
+                      <div class="flex items-center gap-2">
+                        <div class="flex-1 h-1.5 rounded-full" style="background: var(--border);">
+                          <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 91%;"></div>
+                        </div>
+                        <span class="text-xs font-bold" style="color: var(--green);">91%</span>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                      <button class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 cursor-pointer" style="color: var(--primary); background: var(--primary-light);" onmouseover="this.style.background='#DDE1FB'" onmouseout="this.style.background='var(--primary-light)'">Edit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ RIGHT: Side Panel ═══ -->
+        <div class="space-y-6">
+
+          <!-- ATS Score Overview Card -->
+          <div class="bg-white border border-gray-100 rounded-xl p-5" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+            <h3 class="text-base font-bold mb-4" style="color: var(--foreground);">ATS Score Overview</h3>
+
+            <!-- Score Circle -->
+            <div class="flex justify-center mb-5">
+              <div class="relative w-28 h-28">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                  <!-- Background circle -->
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="#E4E7F0" stroke-width="8" />
+                  <!-- Progress circle (87%) -->
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="#5B5FEF" stroke-width="8" stroke-linecap="round"
+                    stroke-dasharray="326.72" stroke-dashoffset="42.47" class="transition-all duration-1000" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span class="text-3xl font-bold" style="color: var(--primary);">87</span>
+                  <span class="text-xs font-medium" style="color: var(--foreground-subtle);">/ 100</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Score Breakdown -->
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span style="color: var(--foreground-muted);">Keyword Match</span>
+                  <span class="font-semibold" style="color: var(--foreground);">92%</span>
+                </div>
+                <div class="h-1.5 rounded-full" style="background: var(--border);">
+                  <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 92%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span style="color: var(--foreground-muted);">Formatting</span>
+                  <span class="font-semibold" style="color: var(--foreground);">88%</span>
+                </div>
+                <div class="h-1.5 rounded-full" style="background: var(--border);">
+                  <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 88%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs mb-1">
+                  <span style="color: var(--foreground-muted);">Experience Relevance</span>
+                  <span class="font-semibold" style="color: var(--foreground);">81%</span>
+                </div>
+                <div class="h-1.5 rounded-full" style="background: var(--border);">
+                  <div class="h-1.5 rounded-full progress-high animate-progress" style="width: 81%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-gray-100" style="border-color: var(--border);">
+              <p class="text-xs" style="color: var(--foreground-subtle);">
+                <span class="font-semibold" style="color: var(--foreground);">Missing keywords:</span> "agile transformation", "stakeholder management", "OKR planning"
+              </p>
+              <button class="mt-2 w-full py-2 text-xs font-semibold rounded-lg transition-all duration-150 cursor-pointer" style="color: var(--accent); background: var(--accent-light);" onmouseover="this.style.background='#D1F7EF'" onmouseout="this.style.background='var(--accent-light)'">
+                Optimize Resume
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Tips Card -->
+          <div class="bg-white border border-gray-100 rounded-xl p-5" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+            <h3 class="text-base font-bold mb-3" style="color: var(--foreground);">💡 Pro Tips</h3>
+            <ul class="space-y-3">
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style="background: var(--primary);"></span>
+                <p class="text-xs leading-relaxed" style="color: var(--foreground-muted);">Tailor your resume to each job description — generic resumes score 40% lower on ATS.</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style="background: var(--accent);"></span>
+                <p class="text-xs leading-relaxed" style="color: var(--foreground-muted);">Use action verbs like "led", "designed", "optimized" instead of "responsible for".</p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style="background: var(--purple);"></span>
+                <p class="text-xs leading-relaxed" style="color: var(--foreground-muted);">Keep your resume to one page if you have less than 10 years of experience.</p>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ Recent Activity (bottom section) ═══ -->
+      <div class="mt-6 bg-white border border-gray-100 rounded-xl p-5" style="border-color: var(--border); box-shadow: var(--card-shadow);">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-bold" style="color: var(--foreground);">Recent Activity</h3>
+          <a href="#" class="text-sm font-medium no-underline hover:underline" style="color: var(--primary);">View All →</a>
+        </div>
+        <div class="space-y-0 divide-y divide-gray-100" style="border-color: var(--border);">
+          <!-- Activity 1 -->
+          <div class="flex items-center gap-4 py-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--primary-light);">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#5B5FEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium" style="color: var(--foreground);">Resume updated — Senior Product Manager</p>
+              <p class="text-xs" style="color: var(--foreground-subtle);">Applied to Google · 2 hours ago</p>
+            </div>
+            <span class="text-xs font-medium whitespace-nowrap" style="color: var(--green);">ATS 92%</span>
+          </div>
+          <!-- Activity 2 -->
+          <div class="flex items-center gap-4 py-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--accent-light);">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#00C9A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium" style="color: var(--foreground);">Cover letter generated — Full Stack Engineer</p>
+              <p class="text-xs" style="color: var(--foreground-subtle);">Ready for review · 5 hours ago</p>
+            </div>
+            <span class="text-xs font-medium whitespace-nowrap" style="color: var(--primary);">New</span>
+          </div>
+          <!-- Activity 3 -->
+          <div class="flex items-center gap-4 py-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style="background: var(--purple-light);">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium" style="color: var(--foreground);">ATS score improved — UX Designer → 62%</p>
+              <p class="text-xs" style="color: var(--foreground-subtle);">Added 3 missing keywords · Yesterday</p>
+            </div>
+            <span class="text-xs font-medium whitespace-nowrap" style="color: var(--orange);">+12%</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       CREATE RESUME MODAL
+  ════════════════════════════════════════════ -->
+  <div id="createModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+    <div onclick="hideCreateModal()" class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-2xl p-6 md:p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto" style="box-shadow: var(--float-shadow);">
+      <!-- Close button -->
+      <button onclick="hideCreateModal()" class="absolute top-4 right-4 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" style="color: var(--foreground-muted);" aria-label="Close">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--primary-light);">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#5B5FEF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold" style="color: var(--foreground);">Create New Resume</h2>
+          <p class="text-sm" style="color: var(--foreground-subtle);">Paste a job description and we'll tailor your resume</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleCreate(event)">
+        <div class="space-y-4">
+          <!-- Job Title -->
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color: var(--foreground);">Job Title</label>
+            <input type="text" placeholder="e.g. Senior Product Manager" required
+              class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm outline-none transition-all duration-200 focus:border-[#5B5FEF] focus:ring-2 focus:ring-[#EEF0FD]"
+              style="border-color: var(--border); color: var(--foreground);" />
+          </div>
+
+          <!-- Company -->
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color: var(--foreground);">Company</label>
+            <input type="text" placeholder="e.g. Google" required
+              class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm outline-none transition-all duration-200 focus:border-[#5B5FEF] focus:ring-2 focus:ring-[#EEF0FD]"
+              style="border-color: var(--border); color: var(--foreground);" />
+          </div>
+
+          <!-- Job Description -->
+          <div>
+            <label class="block text-sm font-semibold mb-1.5" style="color: var(--foreground);">Job Description</label>
+            <textarea rows="5" placeholder="Paste the full job description here..." required
+              class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm outline-none transition-all duration-200 focus:border-[#5B5FEF] focus:ring-2 focus:ring-[#EEF0FD] resize-none"
+              style="border-color: var(--border); color: var(--foreground);"></textarea>
+          </div>
+
+          <!-- Template selection -->
+          <div>
+            <label class="block text-sm font-semibold mb-2" style="color: var(--foreground);">Template</label>
+            <div class="grid grid-cols-3 gap-3">
+              <button type="button" class="template-option selected py-3 px-2 rounded-xl text-center text-xs font-semibold transition-all duration-200 cursor-pointer border-2" style="border-color: var(--primary); background: var(--primary-light); color: var(--primary);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="mx-auto mb-1">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                Modern
+              </button>
+              <button type="button" class="template-option py-3 px-2 rounded-xl text-center text-xs font-semibold transition-all duration-200 cursor-pointer border-2" style="border-color: var(--border); color: var(--foreground-muted);" onclick="selectTemplate(this)">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="mx-auto mb-1">
+                  <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+                Minimal
+              </button>
+              <button type="button" class="template-option py-3 px-2 rounded-xl text-center text-xs font-semibold transition-all duration-200 cursor-pointer border-2" style="border-color: var(--border); color: var(--foreground-muted);" onclick="selectTemplate(this)">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="mx-auto mb-1">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+                Creative
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 mt-6">
+          <button type="button" onclick="hideCreateModal()" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer" style="color: var(--foreground-muted); border: 1px solid var(--border);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='transparent'">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:shadow-btn cursor-pointer" style="background: var(--primary);">
+            Generate Resume
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════ -->
+  <script>
+    // ─── Theme ─────────────────────────────────────
+    function getTheme() {
+      return localStorage.getItem('theme') || 'light';
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('theme', theme);
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('lightIcon').classList.add('hidden');
+        document.getElementById('darkIcon').classList.remove('hidden');
+        // Update sidebar background
+        document.getElementById('sidebar').style.background = '#151829';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('lightIcon').classList.remove('hidden');
+        document.getElementById('darkIcon').classList.add('hidden');
+        document.getElementById('sidebar').style.background = 'white';
+      }
+    }
+
+    function toggleDarkMode() {
+      const current = getTheme();
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    // Initialize theme
+    setTheme(getTheme());
+
+    // ─── Sidebar Toggle (mobile) ──────────────────
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+      document.body.classList.toggle('overflow-hidden');
+    }
+
+    // ─── Modal ────────────────────────────────────
+    function showCreateModal() {
+      document.getElementById('createModal').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function hideCreateModal() {
+      document.getElementById('createModal').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function handleCreate(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.innerHTML = `
+        <svg class="inline animate-spin -mt-0.5 mr-1.5" width="16" height="16" fill="none" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25" />
+          <path fill="currentColor" class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+        Generating...`;
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerHTML = 'Generate Resume';
+        btn.disabled = false;
+        hideCreateModal();
+        alert('✅ Resume generated successfully! Check your Recent Resumes.');
+      }, 2000);
+    }
+
+    // ─── Template Selection ────────────────────────
+    function selectTemplate(el) {
+      document.querySelectorAll('.template-option').forEach(t => {
+        t.style.borderColor = 'var(--border)';
+        t.style.background = 'transparent';
+        t.style.color = 'var(--foreground-muted)';
+      });
+      el.style.borderColor = 'var(--primary)';
+      el.style.background = 'var(--primary-light)';
+      el.style.color = 'var(--primary)';
+    }
+
+    // ─── Close modal on Escape key ────────────────
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideCreateModal();
+    });
+
+    // ─── Close sidebar on resize ──────────────────
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
