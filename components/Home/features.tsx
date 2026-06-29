@@ -1,7 +1,6 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
+import BlinkingCursor from "./BlinkingCursor";
+
 export default function Features() {
   const item = [
     {
@@ -94,6 +93,7 @@ export default function Features() {
       bgColor: "bg-[#FFF7ED]",
     },
   ];
+
   return (
     <div className="w-full bg-white py-10" id="features">
       <div className="mx-auto md:w-9/12 w-11/12 flex md:flex-row flex-col gap-4">
@@ -157,18 +157,7 @@ export default function Features() {
                 At Acme Corp, I owned the roadmap for our core B2C product,
                 collaborating closely with engineering and design to reduce
                 time-to-market by 40%...
-                <motion.span
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "linear",
-                  }}
-                >
-                  |
-                </motion.span>
+                <BlinkingCursor />
               </div>
             </div>
           </div>
