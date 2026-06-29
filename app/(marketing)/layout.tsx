@@ -2,17 +2,14 @@ import React from "react";
 import HomeHeader from "@/components/layout/Home/header";
 import Footer from "@/components/layout/Home/footer";
 
-export default function HomeLayout({
+export default function MarketingLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
- 
   return (
     <div className="flex flex-col h-full overflow-hidden w-full">
-      <HomeHeader/>
-      <main>
-        {/* <SideBar/> */}
-        {children}</main>
-      <Footer/>
+      <HomeHeader />
+      <main>{children}</main>
+      <Footer />
     </div>
   );
 }
