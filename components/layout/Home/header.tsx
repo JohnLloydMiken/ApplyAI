@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-
+import Link from "next/link";
 // ✅ FIX 1: Sidebar is now OUTSIDE HomeHeader.
 // Defined here so React doesn't recreate it on every re-render.
 // It receives navItems and onClose as props instead of closing over state.
@@ -130,7 +130,8 @@ export default function HomeHeader() {
             variant="ghost"
             className="text-[0.9rem] font-medium text-muted-foreground px-4 py-2 cursor-pointer"
           >
-            Sign in
+            <Link href={"/account/signup"}>Sign in</Link>
+            
           </Button>
 
           <Button
