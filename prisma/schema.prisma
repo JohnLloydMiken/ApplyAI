@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+// ─────────────────────────────────────────────
+// NextAuth core models — this shape is required
+// by @auth/prisma-adapter. Don't rename fields;
+// the adapter queries them by exact name.
+// ─────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  // Added for Credentials provider.
+  // Nullable because Google-only users will never set one —
+  // if you made this required, Google sign-in would break at
+  // the Prisma level on user creation.
+  password      String?
+
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// One row per OAuth provider linked to a user.
+// Google sign-in writes here. Credentials sign-in never
+// touches this table at all — it goes straight to User.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// Required by the adapter's TypeScript contract even though
+// you're using JWT sessions — NextAuth won't write rows here
+// in JWT mode, but Prisma will fail to generate the client
+// without this model present. Leave it as-is.
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Used for email verification / magic links. Not actively
+// used by your Credentials + Google setup today, but the
+// adapter expects the model to exist.
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
