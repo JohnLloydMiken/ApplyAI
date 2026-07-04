@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { SiFacebook, SiGoogle } from "@icons-pack/react-simple-icons";
 import {
   Card,
   CardAction,
@@ -11,24 +10,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LottieAnimation from "../lottie-animation";
-import Link from "next/link";
-export default function SignUpForm() {
+export default function LogInForm() {
   return (
     <div className="w-11/12 lg:w-9/12 my-0 mx-auto min-h-screen flex items-center justify-center py-20 lg:py-0 ">
       <div className="w-1/2  flex flex-col justify-center items-start gap-5">
-      <h1 className="font-display text-xl font-bold">Your next job starts here.</h1>
-      <p className="font-sans font-bold text-3xl text-primary max-w-lg">Sign up to instantly generate a professional resume.</p>
+        <h1 className="font-display text-2xl font-bold">Welcome Back </h1>
+        <p className="font-sans font-medium text-3xl text-primary">
+          Ready to turn applications into offers?
+        </p>
+          
         <Card className="w-full max-w-sm md:max-w-md lg:mx-w-lg shadow-(--shadow-card) ">
           <CardHeader>
-            <CardTitle className="font-sans">Create an Account</CardTitle>
+            <CardTitle className="font-sans">Login to your account</CardTitle>
             <CardDescription>
-              Enter your email below to create to your account
+              Enter your email below to login to your account
             </CardDescription>
             <CardAction>
-              <Button variant="link"><Link href={"/account/login"}>Login</Link></Button>
+              <Button variant="link">Sign Up</Button>
             </CardAction>
           </CardHeader>
           <CardContent>
@@ -39,7 +41,7 @@ export default function SignUpForm() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="applyai@example.com"
+                    placeholder="m@example.com"
                     required
                   />
                 </div>
@@ -60,11 +62,11 @@ export default function SignUpForm() {
           </CardContent>
           <CardFooter className="flex-col gap-2">
             <Button type="submit" className="w-full">
-              Sign up
+              Login
             </Button>
             <Button variant="outline" className="w-full">
-            
-              Create account with Google
+         
+              Login with Google
             </Button>
           </CardFooter>
         </Card>
