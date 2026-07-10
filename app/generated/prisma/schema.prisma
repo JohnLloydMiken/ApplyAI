@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-
 }
 
 // ─────────────────────────────────────────────
@@ -25,13 +24,13 @@ model User {
   // Nullable because Google-only users will never set one —
   // if you made this required, Google sign-in would break at
   // the Prisma level on user creation.
-  password      String?
+  password String?
 
-  accounts      Account[]
-  sessions      Session[]
+  accounts Account[]
+  sessions Session[]
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // One row per OAuth provider linked to a user.
