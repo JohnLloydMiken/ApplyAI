@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-
+import { Toaster } from "sonner";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -26,8 +26,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={` ${inter.variable} ${playfair.variable} h-full antialiased bg-bg`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="en"
+      className={` ${inter.variable} ${playfair.variable} h-full antialiased bg-bg`}
+    >
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Toaster richColors position="top-center" />
+      </body>
     </html>
   );
 }
