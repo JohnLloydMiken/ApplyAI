@@ -42,7 +42,7 @@ const steps: StepItem[] = [
           <div>
             <Button size="sm">
               
-              <Link href={"/build/template"} className="flex items-center justify-center cursor-pointer font-medium gap-1.5">Choose Now <ArrowRight className="w-3.5 h-3.5" /></Link>
+              <Link href={"/dashboard/build/templates"} className="flex items-center justify-center cursor-pointer font-medium gap-1.5">Choose Now <ArrowRight className="w-3.5 h-3.5" /></Link>
             </Button>
           </div>
         </div>
@@ -186,7 +186,7 @@ const steps: StepItem[] = [
 
             <div className="pt-1">
               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
-               <Link href={"/build/template"} className=" text-white font-medium shadow-xs gap-1.5 transition-all cursor-pointer flex items-center justify-center">
+               <Link href={"/dashboard/build/templates"} className=" text-white font-medium shadow-xs gap-1.5 transition-all cursor-pointer flex items-center justify-center">
                 Create Now
                 <ArrowRight className="w-3.5 h-3.5" />
                </Link>
