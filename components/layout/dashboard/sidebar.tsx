@@ -104,7 +104,7 @@ export default function DashboardSideBar() {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-64 lg:w-72 h-dvh sticky top-0 shrink-0 flex-col bg-sidebar border-r border-sidebar-border shadow-sm z-30">
+      <aside className="hidden md:flex w-64 lg:w-72 h-dvh fixed top-0 shrink-0 flex-col bg-sidebar border-r border-sidebar-border shadow-sm z-30">
         <SidebarNav />
       </aside>
 

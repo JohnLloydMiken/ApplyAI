@@ -6,7 +6,7 @@ export const SidebarContent = [
         content: [
             {
                 label: "Generate",
-                href: "/dashboard/build/generate",
+                href: "/dashboard/build/templates",
                 icon: "file-user"
             },
             {
