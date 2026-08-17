@@ -2,10 +2,12 @@
 import React from 'react'
 import { TEMPLATES, TemplateMeta } from '@/lib/resume-templates/general-template'
 import { TemplateCard } from './resume-card'
+import { useRouter } from 'next/navigation'
 export default function TemplatePreview() {
 
+  const router = useRouter()
   const handleResumeTemplate = (template: TemplateMeta)=>{
-    console.log("Selected:", template.id)
+    router.push(`/dashboard/build/form/${template.id}`)
   }
   return (
     <section className="mx-auto max-w-[1280px] px-4 py-10">
