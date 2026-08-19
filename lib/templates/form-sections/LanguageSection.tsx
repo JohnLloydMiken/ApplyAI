@@ -26,7 +26,7 @@ export default function LanguageSection() {
   }
 
   return (
-    <div className="w-9/12 border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
+    <div className="w-full border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
       <div className="flex gap-2 mb-6">
         <div className="size-12 rounded-lg flex justify-center items-center bg-primary-light">
           <Languages color="#5B5FEF" />

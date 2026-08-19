@@ -1,26 +1,13 @@
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldSet,
-} from "@/components/ui/field";
+"use client";
+import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-
-export interface SectionItem {
-  id: string;
-  primary: string;   // School or Job Role
-  secondary: string; // Degree or Company
-  startYear: string;
-  endYear: string;
-  description?: string; // Achievements or Job description
-}
+import { Controller, useFormContext } from "react-hook-form";
 
 interface SectionCardProps {
   type: "education" | "experience";
-  item: SectionItem;
-  onChange: (id: string, field: keyof SectionItem, value: string) => void;
+  index: number;          // ← which row in the array
   onDelete: () => void;
 }
 
@@ -43,13 +30,20 @@ const copy = {
   },
 } as const;
 
-export function SectionCard({ type, item, onChange, onDelete }: SectionCardProps) {
+export function SectionCard({ type, index, onDelete }: SectionCardProps) {
   const t = copy[type];
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  // errors for THIS specific row, e.g. errors.education[2].primary
+  const rowErrors = (errors[type] as any)?.[index];
 
   return (
-    <FieldSet className="w-full relative">
+    <FieldSet className="w-full relative border border-border p-6 rounded-3xl">
       <div className="flex justify-end">
-        <Button onClick={onDelete} className="max-w-sm cursor-pointer">
+        <Button type="button" onClick={onDelete} className="max-w-sm cursor-pointer">
           <Trash2 />
           Delete
         </Button>
@@ -58,57 +52,72 @@ export function SectionCard({ type, item, onChange, onDelete }: SectionCardProps
       <FieldGroup>
         <div className="grid grid-cols-2 gap-4">
           <Field>
-            <FieldLabel htmlFor={`primary-${item.id}`}>{t.primaryLabel}</FieldLabel>
-            <Input
-              id={`primary-${item.id}`}
-              type="text"
-              placeholder={t.primaryPlaceholder}
-              value={item.primary}
-              onChange={(e) => onChange(item.id, "primary", e.target.value)}
+            <FieldLabel htmlFor={`${type}.${index}.primary`}>
+              {t.primaryLabel}
+            </FieldLabel>
+            <Controller
+              name={`${type}.${index}.primary`}
+              control={control}
+              render={({ field }) => (
+                <Input {...field} placeholder={t.primaryPlaceholder} />
+              )}
             />
+            {rowErrors?.primary && (
+              <p className="text-xs text-red-500 mt-1">{rowErrors.primary.message}</p>
+            )}
           </Field>
+
           <Field>
-            <FieldLabel htmlFor={`secondary-${item.id}`}>{t.secondaryLabel}</FieldLabel>
-            <Input
-              id={`secondary-${item.id}`}
-              type="text"
-              placeholder={t.secondaryPlaceholder}
-              value={item.secondary}
-              onChange={(e) => onChange(item.id, "secondary", e.target.value)}
+            <FieldLabel htmlFor={`${type}.${index}.secondary`}>
+              {t.secondaryLabel}
+            </FieldLabel>
+            <Controller
+              name={`${type}.${index}.secondary`}
+              control={control}
+              render={({ field }) => (
+                <Input {...field} placeholder={t.secondaryPlaceholder} />
+              )}
             />
+            {rowErrors?.secondary && (
+              <p className="text-xs text-red-500 mt-1">{rowErrors.secondary.message}</p>
+            )}
           </Field>
+
           <Field>
-            <FieldLabel htmlFor={`start-year-${item.id}`}>Start year</FieldLabel>
-            <Input
-              id={`start-year-${item.id}`}
-              type="text"
-              placeholder="2022"
-              value={item.startYear}
-              onChange={(e) => onChange(item.id, "startYear", e.target.value)}
+            <FieldLabel htmlFor={`${type}.${index}.startYear`}>Start year</FieldLabel>
+            <Controller
+              name={`${type}.${index}.startYear`}
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="2022" />}
             />
+            {rowErrors?.startYear && (
+              <p className="text-xs text-red-500 mt-1">{rowErrors.startYear.message}</p>
+            )}
           </Field>
+
           <Field>
-            <FieldLabel htmlFor={`end-year-${item.id}`}>End year</FieldLabel>
-            <Input
-              id={`end-year-${item.id}`}
-              type="text"
-              placeholder="2026"
-              value={item.endYear}
-              onChange={(e) => onChange(item.id, "endYear", e.target.value)}
+            <FieldLabel htmlFor={`${type}.${index}.endYear`}>End year</FieldLabel>
+            <Controller
+              name={`${type}.${index}.endYear`}
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="2026" />}
             />
+            {rowErrors?.endYear && (
+              <p className="text-xs text-red-500 mt-1">{rowErrors.endYear.message}</p>
+            )}
           </Field>
         </div>
+
         <Field>
-          <FieldLabel htmlFor={`description-${item.id}`}>
-            {t.descriptionLabel}{" "}
-            <span className="text-foreground-subtle">{"(Optional)"}</span>
+          <FieldLabel htmlFor={`${type}.${index}.description`}>
+            {t.descriptionLabel} <span className="text-foreground-subtle">(Optional)</span>
           </FieldLabel>
-          <Input
-            id={`description-${item.id}`}
-            type="text"
-            placeholder={t.descriptionPlaceholder}
-            value={item.description ?? ""}
-            onChange={(e) => onChange(item.id, "description", e.target.value)}
+          <Controller
+            name={`${type}.${index}.description`}
+            control={control}
+            render={({ field }) => (
+              <Input {...field} placeholder={t.descriptionPlaceholder} />
+            )}
           />
         </Field>
       </FieldGroup>

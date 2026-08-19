@@ -1,33 +1,28 @@
 "use client";
 import { useState } from "react";
-import { SectionCard, SectionItem } from "@/components/Dashboard/build/section-card";
+import { SectionCard } from "@/components/Dashboard/build/section-card";
 import { Briefcase } from "lucide-react";
 import AddBtn from "@/components/Dashboard/build/add-btn";
-
-function createEmptyItem(): SectionItem {
-  return {
-    id: crypto.randomUUID(),
-    primary: "",
-    secondary: "",
-    startYear: "",
-    endYear: "",
-    description: "",
-  };
-}
+import { useFormContext, useFieldArray } from "react-hook-form";
 
 export default function ExperienceSection() {
-  const [items, setItems] = useState<SectionItem[]>([]);
-
-  const handleAdd = () => setItems((prev) => [...prev, createEmptyItem()]);
-  const handleDelete = (id: string) =>
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  const handleChange = (id: string, field: keyof SectionItem, value: string) =>
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
+  const { control } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "experience",
+  });
+  const handleAdd = () =>
+    append({
+      id: crypto.randomUUID(),
+      primary: "",
+      secondary: "",
+      startYear: "",
+      endYear: "",
+      description: "",
+    });
 
   return (
-    <div className="w-9/12 border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
+    <div className="w-full border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
       <div className="flex gap-2 mb-6">
         <div className="size-12 rounded-lg flex justify-center items-center bg-primary-light">
           <Briefcase color="#5B5FEF" />
@@ -40,13 +35,16 @@ export default function ExperienceSection() {
         </div>
       </div>
 
-      {items.map((item) => (
-        <div key={item.id} className="border border-border p-3 rounded-2xl mb-4">
+      {fields.map((field, index) => (
+        <div
+          key={field.id}
+          className=" p-3 rounded-2xl mb-4"
+        >
           <SectionCard
+            key={field.id} // useFieldArray gives each row a stable id
             type="experience"
-            item={item}
-            onChange={handleChange}
-            onDelete={() => handleDelete(item.id)}
+            index={index} 
+            onDelete={() => remove(index)}
           />
         </div>
       ))}
