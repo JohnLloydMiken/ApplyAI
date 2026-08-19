@@ -1,33 +1,36 @@
 "use client";
-import { useState } from "react";
-import { SectionCard, SectionItem } from "@/components/Dashboard/build/section-card";
+
+import { SectionCard } from "@/components/Dashboard/build/section-card";
 import { GraduationCap } from "lucide-react";
 import AddBtn from "@/components/Dashboard/build/add-btn";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
-function createEmptyItem(): SectionItem {
-  return {
-    id: crypto.randomUUID(),
-    primary: "",
-    secondary: "",
-    startYear: "",
-    endYear: "",
-    description: "",
-  };
+export interface SectionItem {
+  id: string;
+  primary: string; // School or Job Role
+  secondary: string; // Degree or Company
+  startYear: string;
+  endYear: string;
+  description?: string; // Achievements or Job description
 }
 
 export default function EducationSection() {
-  const [items, setItems] = useState<SectionItem[]>([]);
-
-  const handleAdd = () => setItems((prev) => [...prev, createEmptyItem()]);
-  const handleDelete = (id: string) =>
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  const handleChange = (id: string, field: keyof SectionItem, value: string) =>
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-
+  const handleAdd = () =>
+    append({
+      id: crypto.randomUUID(),
+      primary: "",
+      secondary: "",
+      startYear: "",
+      endYear: "",
+      description: "",
+    });
+  const { control } = useFormContext();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "education",
+  });
   return (
-    <div className="w-9/12 border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
+    <div className="w-full border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
       <div className="flex gap-2 mb-6">
         <div className="size-12 rounded-lg flex justify-center items-center bg-primary-light">
           <GraduationCap color="#5B5FEF" />
@@ -40,13 +43,16 @@ export default function EducationSection() {
         </div>
       </div>
 
-      {items.map((item) => (
-        <div key={item.id} className="border border-border p-3 rounded-2xl mb-4">
+      {fields.map((field, index) => (
+        <div
+          key={field.id}
+          className=" p-3 rounded-2xl mb-4"
+        >
           <SectionCard
+            key={field.id} // useFieldArray gives each row a stable id
             type="education"
-            item={item}
-            onChange={handleChange}
-            onDelete={() => handleDelete(item.id)}
+            index={index} // ← the important part: pass the array index down
+            onDelete={() => remove(index)}
           />
         </div>
       ))}

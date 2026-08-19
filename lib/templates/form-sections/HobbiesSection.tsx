@@ -5,8 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 export default function HubbiesSection() {
   return (
-    <div className="w-9/12 border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
-      <form>
+    <div className="w-full border border-border p-6 shadow-(--shadow-card) bg-white rounded-4xl">
+  
         <FieldSet>
           <FieldGroup>
             <Field>
@@ -38,7 +38,7 @@ export default function HubbiesSection() {
             </Field>
           </FieldGroup>
         </FieldSet>
-      </form>
+  
     </div>
   );
 }
