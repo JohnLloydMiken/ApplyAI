@@ -14,6 +14,8 @@ export function ResumeFormProvider({
   const methods = useForm<z.infer<typeof resumeFormSchema>>({
     resolver: zodResolver(resumeFormSchema),
     defaultValues: {
+      photo: null,
+      targetRole: "",
       summary: "",
       skills: [],
       education: [],

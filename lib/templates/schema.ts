@@ -1,10 +1,11 @@
-import { Certificate } from "node:crypto";
 import { z } from "zod";
 
-export const resumeFormSchema = z.object({
+// ---- Renderable resume content (existing fields + photo) ----
+const resumeContentSchema = z.object({
+  photo: z.string().url().nullable().optional(), // uploaded URL, not raw file
   summary: z
     .string()
-    .min(10, "Summary Should Have Atleast 10 Characters")
+    .min(10, "Summary should have at least 10 characters")
     .optional(),
   skills: z.array(z.string()).optional(),
   education: z
@@ -21,7 +22,7 @@ export const resumeFormSchema = z.object({
     .optional(),
   experience: z
     .array(
-       z.object({
+      z.object({
         id: z.string(),
         primary: z.string().min(1, "Job Role is required"),
         secondary: z.string().min(1, "Company is required"),
@@ -36,9 +37,22 @@ export const resumeFormSchema = z.object({
   certificates: z
     .array(
       z.object({
+        id: z.string(),
         title: z.string().min(1),
         description: z.string().optional(),
       }),
     )
     .optional(),
 });
+
+// ---- AI generation hints (not rendered directly) ----
+const resumeContextSchema = z.object({
+  targetRole: z.string().min(1, "Target role is required").optional(),
+  jobDescription: z.string().optional(), // reserved for later, not used yet
+});
+
+// ---- Combined form schema ----
+export const resumeFormSchema = resumeContentSchema.merge(resumeContextSchema);
+
+// Export sub-schemas too, useful later when building the AI request payload
+export { resumeContentSchema, resumeContextSchema };
