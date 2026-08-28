@@ -78,3 +78,9 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Post {
+  id        String   @id @default(cuid())
+  imageUrl  String? // public URL or storage path
+  createdAt DateTime @default(now())
+}
