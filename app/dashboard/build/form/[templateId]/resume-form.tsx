@@ -16,6 +16,7 @@ export function ResumeFormProvider({
     defaultValues: {
       photo: null,
       targetRole: "",
+      jobDescription: "",
       summary: "",
       skills: [],
       education: [],

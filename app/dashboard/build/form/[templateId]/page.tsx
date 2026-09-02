@@ -33,7 +33,7 @@ export default async function FormPage({
       </div>
       <div className="w-9/12">
         <ResumeFormProvider>
-          {template.photoSupport === "required" ? <ImageUploadForm/> : null}
+          {template.photoSupport === "required" || "optional" ? <ImageUploadForm/> : null}
           <TargetRoleSection/>
           {template.supportedSections.map((section) => {
             const Section = SECTION_REGISTRY[section];
