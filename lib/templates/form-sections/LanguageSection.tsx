@@ -1,28 +1,25 @@
 "use client"
 
-import { useState } from "react";
 import AddBtn from "@/components/Dashboard/build/add-btn";
 import { Languages } from "lucide-react";
-import { LanguageCard, type LanguageItem } from "@/components/Dashboard/build/language-card";
+import { LanguageCard } from "@/components/Dashboard/build/language-card";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
 export default function LanguageSection() {
-  const [items, setItems] = useState<LanguageItem[]>([]);
+  const { control } = useFormContext();
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "languages",
+  });
 
   function handleAdd() {
-    setItems((prev) => [
-      ...prev,
-      { id: crypto.randomUUID(), code: "", proficiency: "" },
-    ]);
+    append({ id: crypto.randomUUID(), code: "", proficiency: "" });
   }
 
-  function handleChange(id: string, field: keyof LanguageItem, value: string) {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-  }
-
-  function handleDelete(id: string) {
-    setItems((prev) => prev.filter((item) => item.id !== id));
+  function handleChange(id: string, field: string, value: string) {
+    const index = fields.findIndex((f: any) => f.id === id);
+    if (index === -1) return;
+    update(index, { ...fields[index], [field]: value });
   }
 
   return (
@@ -39,14 +36,14 @@ export default function LanguageSection() {
         </div>
       </div>
 
-      {items.length > 0 && (
+      {fields.length > 0 && (
         <div className="flex flex-col gap-6 mb-6">
-          {items.map((item) => (
+          {fields.map((item: any, index) => (
             <LanguageCard
               key={item.id}
               item={item}
               onChange={handleChange}
-              onDelete={() => handleDelete(item.id)}
+              onDelete={() => remove(index)}
             />
           ))}
         </div>

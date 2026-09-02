@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/field";
 import { UserRoundSearch } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Controller, useFormContext } from "react-hook-form";
 
 export default function TargetRoleSection() {
@@ -54,6 +55,34 @@ export default function TargetRoleSection() {
 
             <FieldLabel className="text-xs font-light text-foreground-subtle mt-2">
               Not sure yet? Leave it general — you can refine this later.
+            </FieldLabel>
+          </Field>
+
+          <Field className="mt-6">
+            <FieldLabel className="text-base font-bold">
+              Job description <span className="font-light text-foreground-subtle">(optional)</span>
+            </FieldLabel>
+
+            <Controller
+              name="jobDescription"
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  placeholder="Paste the job posting here — AI will tailor your resume to match it more closely."
+                  className="resize-none min-h-32"
+                />
+              )}
+            />
+
+            {errors.jobDescription && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.jobDescription.message as string}
+              </p>
+            )}
+
+            <FieldLabel className="text-xs font-light text-foreground-subtle mt-2">
+              Got a specific posting in mind? Pasting it in lets AI match your resume's language and skills to what they're looking for.
             </FieldLabel>
           </Field>
         </FieldGroup>

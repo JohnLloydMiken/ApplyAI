@@ -38,7 +38,7 @@ export const TEMPLATES: TemplateMeta[] = [
     photoSupport: 'required',
     layout: 'sidebar',
     isAtsSafe: false,
-    supportedSections: ['languages', 'hobbies', 'skills', 'education', 'experience'],
+    supportedSections: ['summary', 'languages', 'hobbies', 'skills', 'education', 'experience'],
     tags: ['creative', 'marketing'],
     description: "Creative/marketing roles — the Larry Tibbetts style, gold accents"
   },

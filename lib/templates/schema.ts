@@ -1,8 +1,8 @@
 import { z } from "zod";
-
+import { personalInfoSchema } from "./personal-info-schema";
 // ---- Renderable resume content (existing fields + photo) ----
 const resumeContentSchema = z.object({
-  photo: z.string().url().nullable().optional(), // uploaded URL, not raw file
+ 
   summary: z
     .string()
     .min(10, "Summary should have at least 10 characters")
@@ -32,7 +32,7 @@ const resumeContentSchema = z.object({
       }),
     )
     .optional(),
-  languages: z.array(z.string()).optional(),
+  languages: z.array(z.object({ id: z.string(), code: z.string(), proficiency: z.string() })).optional(),
   hobbies: z.array(z.string()).optional(),
   certificates: z
     .array(
@@ -48,11 +48,13 @@ const resumeContentSchema = z.object({
 // ---- AI generation hints (not rendered directly) ----
 const resumeContextSchema = z.object({
   targetRole: z.string().min(1, "Target role is required").optional(),
-  jobDescription: z.string().optional(), // reserved for later, not used yet
+  jobDescription: z.string().max(5000, "Job description is too long — try pasting just the responsibilities/requirements section").optional(),
 });
 
 // ---- Combined form schema ----
-export const resumeFormSchema = resumeContentSchema.merge(resumeContextSchema);
+export const resumeFormSchema = resumeContentSchema
+  .merge(resumeContextSchema)
+  .merge(personalInfoSchema);
 
 // Export sub-schemas too, useful later when building the AI request payload
 export { resumeContentSchema, resumeContextSchema };
