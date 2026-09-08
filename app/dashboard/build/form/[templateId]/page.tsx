@@ -4,7 +4,7 @@ import { ResumeFormProvider } from "./resume-form";
 import { SECTION_REGISTRY } from "@/lib/templates/registry";
 import TargetRoleSection from "@/lib/templates/form-sections/TargetRoleSection";
 import ImageUploadForm from "@/lib/templates/form-sections/PhotoUploadSection";
-import { Divide } from "lucide-react";
+import PersonalInfoSection from "@/lib/templates/form-sections/PersonalInfoSection";
 export default async function FormPage({
   params,
 }: {
@@ -33,8 +33,10 @@ export default async function FormPage({
       </div>
       <div className="w-9/12">
         <ResumeFormProvider>
-          {template.photoSupport === "required" || "optional" ? <ImageUploadForm/> : null}
+          {template.photoSupport === "required" || template.photoSupport === "optional" ? <ImageUploadForm/> : null}
+          <PersonalInfoSection/>
           <TargetRoleSection/>
+          
           {template.supportedSections.map((section) => {
             const Section = SECTION_REGISTRY[section];
             return <Section key={section} />;

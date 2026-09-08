@@ -9,7 +9,9 @@ export default function OutputPage() {
   const router = useRouter();
   const formData = useResumeStore((state) => state.data);
   const result = useResumeStore((state) => state.generatedResume);
-  const setGeneratedResume = useResumeStore((state) => state.setGeneratedResume);
+  const setGeneratedResume = useResumeStore(
+    (state) => state.setGeneratedResume,
+  );
 
   const [loading, setLoading] = useState(!result);
   const [error, setError] = useState<string | null>(null);
@@ -75,12 +77,15 @@ export default function OutputPage() {
   }
 
   if (!result) return null;
-  console.log(formData)
+  if (!formData) return null;
+  console.log(formData);
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
       {result.flaggedGaps.length > 0 && (
         <div className="text-sm text-amber-700 bg-amber-50 rounded-lg p-3">
-          <p className="font-medium mb-1">A few sections could use more detail:</p>
+          <p className="font-medium mb-1">
+            A few sections could use more detail:
+          </p>
           <ul className="list-disc list-inside">
             {result.flaggedGaps.map((gap, i) => (
               <li key={i}>{gap}</li>
@@ -88,7 +93,32 @@ export default function OutputPage() {
           </ul>
         </div>
       )}
-
+      <section>
+        <h2 className="text-lg font-bold mb-2">Personal Info</h2>
+        <p className="font-medium">{formData.fullName}</p>
+        {formData.age && <p className="text-sm">{formData.age} years old</p>}
+        {formData.dateOfBirth && (
+          <p className="text-sm">{formData.dateOfBirth}</p>
+        )}
+        {formData.nationality && (
+          <p className="text-sm">{formData.nationality}</p>
+        )}
+        {formData.address && <p className="text-sm">{formData.address}</p>}
+        {formData.phone && <p className="text-sm">{formData.phone}</p>}
+        {formData.email && <p className="text-sm">{formData.email}</p>}
+        {formData.links && formData.links.length > 0 && (
+          <ul className="text-sm mt-1">
+            {formData.links.map((link) => (
+              <li key={link.id}>
+                {link.label}:{" "}
+                <a href={link.url} className="text-accent underline">
+                  {link.url}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
       <section>
         <h2 className="text-lg font-bold mb-2">Summary</h2>
         <p>{result.summary}</p>
@@ -97,13 +127,22 @@ export default function OutputPage() {
       <section>
         <h2 className="text-lg font-bold mb-2">Skills</h2>
         {result.skills.technical.length > 0 && (
-          <p><span className="font-medium">Technical:</span> {result.skills.technical.join(", ")}</p>
+          <p>
+            <span className="font-medium">Technical:</span>{" "}
+            {result.skills.technical.join(", ")}
+          </p>
         )}
         {result.skills.tools.length > 0 && (
-          <p><span className="font-medium">Tools:</span> {result.skills.tools.join(", ")}</p>
+          <p>
+            <span className="font-medium">Tools:</span>{" "}
+            {result.skills.tools.join(", ")}
+          </p>
         )}
         {result.skills.soft.length > 0 && (
-          <p><span className="font-medium">Soft skills:</span> {result.skills.soft.join(", ")}</p>
+          <p>
+            <span className="font-medium">Soft skills:</span>{" "}
+            {result.skills.soft.join(", ")}
+          </p>
         )}
       </section>
 
@@ -112,10 +151,16 @@ export default function OutputPage() {
         <div className="space-y-4">
           {result.experience.map((exp) => (
             <div key={exp.id}>
-              <p className="font-medium">{exp.role} — {exp.company}</p>
-              <p className="text-xs text-foreground-subtle">{exp.startYear} – {exp.endYear}</p>
+              <p className="font-medium">
+                {exp.role} — {exp.company}
+              </p>
+              <p className="text-xs text-foreground-subtle">
+                {exp.startYear} – {exp.endYear}
+              </p>
               <ul className="list-disc list-inside mt-1">
-                {exp.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                {exp.bullets.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
               </ul>
             </div>
           ))}
@@ -127,8 +172,12 @@ export default function OutputPage() {
         <div className="space-y-2">
           {result.education.map((edu) => (
             <div key={edu.id}>
-              <p className="font-medium">{edu.degree} — {edu.school}</p>
-              <p className="text-xs text-foreground-subtle">{edu.startYear} – {edu.endYear}</p>
+              <p className="font-medium">
+                {edu.degree} — {edu.school}
+              </p>
+              <p className="text-xs text-foreground-subtle">
+                {edu.startYear} – {edu.endYear}
+              </p>
               {edu.highlight && <p className="text-sm">{edu.highlight}</p>}
             </div>
           ))}
@@ -137,8 +186,12 @@ export default function OutputPage() {
 
       {result.keywordsMatched.length > 0 && (
         <section>
-          <h2 className="text-lg font-bold mb-2">Matched keywords from job posting</h2>
-          <p className="text-sm text-foreground-subtle">{result.keywordsMatched.join(", ")}</p>
+          <h2 className="text-lg font-bold mb-2">
+            Matched keywords from job posting
+          </h2>
+          <p className="text-sm text-foreground-subtle">
+            {result.keywordsMatched.join(", ")}
+          </p>
         </section>
       )}
     </div>
