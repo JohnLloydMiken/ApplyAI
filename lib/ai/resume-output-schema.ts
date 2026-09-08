@@ -2,6 +2,7 @@
 import { z } from "zod";
 
 export const generatedResumeSchema = z.object({
+
   summary: z.string().min(1),
   skills: z.object({
     technical: z.array(z.string()),

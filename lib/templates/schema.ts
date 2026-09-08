@@ -2,7 +2,7 @@ import { z } from "zod";
 import { personalInfoSchema } from "./personal-info-schema";
 // ---- Renderable resume content (existing fields + photo) ----
 const resumeContentSchema = z.object({
- 
+  photo: z.string().url().nullable().optional(),
   summary: z
     .string()
     .min(10, "Summary should have at least 10 characters")

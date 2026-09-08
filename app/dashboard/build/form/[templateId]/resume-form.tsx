@@ -24,6 +24,14 @@ export function ResumeFormProvider({
       hobbies: [],
       certificates: [],
       languages: [],
+      fullName: "",
+      age:"",
+      address: "",
+      dateOfBirth: "",
+      nationality: "",
+      phone: "",
+      email: "",
+      links: []
     },
   });
 
