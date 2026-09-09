@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import { useResumeStore } from "@/lib/store/resume-store";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,9 +8,16 @@ import { resumeFormSchema } from "@/lib/templates/schema";
 import { useRouter } from "next/navigation";
 export function ResumeFormProvider({
   children,
+  templateId,
 }: {
   children: React.ReactNode;
+  templateId: string;
 }) {
+  const setTemplateId = useResumeStore((state) => state.setTemplateId);
+   useEffect(() => {
+    setTemplateId(templateId);
+  }, [templateId, setTemplateId]);
+  
   const methods = useForm<z.infer<typeof resumeFormSchema>>({
     resolver: zodResolver(resumeFormSchema),
     defaultValues: {

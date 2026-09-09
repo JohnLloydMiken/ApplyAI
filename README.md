@@ -1,4 +1,4 @@
-# AI Resume & Cover Letter Builder — Project Overview
+# ApplyAI — AI Resume & Cover Letter Builder
 
 > A solo side project. Paste a job description and your background, get a tailored resume, cover letter, and ATS score — ready to export as PDF or Word.
 

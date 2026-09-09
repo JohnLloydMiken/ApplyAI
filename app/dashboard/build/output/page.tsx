@@ -1,10 +1,10 @@
 // app/dashboard/build/output/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useResumeStore } from "@/lib/store/resume-store";
-
+import { buildRenderableResume } from "@/lib/templates/build-renderable";
 export default function OutputPage() {
   const router = useRouter();
   const formData = useResumeStore((state) => state.data);
@@ -15,7 +15,19 @@ export default function OutputPage() {
 
   const [loading, setLoading] = useState(!result);
   const [error, setError] = useState<string | null>(null);
+  const templateId = useResumeStore((state) => state.templateId);
 
+  const renderableResume = useMemo(() => {
+    if (!formData || !result) return null;
+    return buildRenderableResume(formData, result);
+  }, [formData, result]);
+
+  useEffect(() => {
+    if (renderableResume) {
+      console.log("✅ renderableResume:", renderableResume);
+      console.log("✅ templateId:", templateId);
+    }
+  }, [renderableResume, templateId]);
   useEffect(() => {
     if (!formData) {
       router.push("/dashboard/build");
@@ -54,6 +66,29 @@ export default function OutputPage() {
     run();
   }, [formData, result, router, setGeneratedResume]);
 
+  async function downloadResume(format: "pdf" | "docx") {
+    if (!renderableResume || !templateId) return;
+
+    const res = await fetch("/api/export", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId, format, data: renderableResume }),
+    });
+
+    if (!res.ok) {
+      console.error("Export failed:", await res.text());
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `resume.${format}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
@@ -81,6 +116,20 @@ export default function OutputPage() {
   console.log(formData);
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-8">
+      <div className="flex gap-3">
+        <button
+          onClick={() => downloadResume("pdf")}
+          className="bg-accent text-white rounded-2xl px-4 py-2"
+        >
+          Download PDF
+        </button>
+        <button
+          onClick={() => downloadResume("docx")}
+          className="bg-accent text-white rounded-2xl px-4 py-2"
+        >
+          Download DOCX
+        </button>
+      </div>
       {result.flaggedGaps.length > 0 && (
         <div className="text-sm text-amber-700 bg-amber-50 rounded-lg p-3">
           <p className="font-medium mb-1">

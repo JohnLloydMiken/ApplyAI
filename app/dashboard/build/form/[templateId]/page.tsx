@@ -32,7 +32,7 @@ export default async function FormPage({
         </p>
       </div>
       <div className="w-9/12">
-        <ResumeFormProvider>
+        <ResumeFormProvider templateId={template.id}>
           {template.photoSupport === "required" || template.photoSupport === "optional" ? <ImageUploadForm/> : null}
           <PersonalInfoSection/>
           <TargetRoleSection/>
